@@ -23,8 +23,8 @@ export default function AddHabitModal({setShowAddModal, habitHandler, editValues
         setShowAddModal(false);
         inputRef.current.value = ''
         setWarning('')
-        setSelectedDay([]);
         setHabitName('')
+        setSelectedDay([]);
         resetHandler(true)
     }
 
@@ -48,6 +48,7 @@ export default function AddHabitModal({setShowAddModal, habitHandler, editValues
     useEffect(()=>{
         if(editValues){        
         inputRef.current.value = editValues.name
+        setHabitName(editValues.name)
         setSelectedDay(editValues.schedule)
         }else{
             return
