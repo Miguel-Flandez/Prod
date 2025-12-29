@@ -13,6 +13,8 @@ export default function Habits(){
     const [deleteIndex, setDeleteIndex] = useState(null)
     const [habits, setHabits] = useState([])
 
+    
+
 
     // inputs the habit name and schedule
     function handleHabitInput(value1, value2){
@@ -30,7 +32,7 @@ export default function Habits(){
                 return [...habits,{
                 name: value1,
                 schedule: value2,
-                streak: 0,
+                done: 0,
                 daysCompleted:[]
                 }]
             }
