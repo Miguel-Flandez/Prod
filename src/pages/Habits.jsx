@@ -70,10 +70,7 @@ export default function Habits(){
         const stored = localStorage.getItem('habits')
 
         stored && setHabits(JSON.parse(stored))
-        
-        // if(stored){
-        //     setHabits(JSON.parse(stored))
-        // }
+
 
     }, [])
     
