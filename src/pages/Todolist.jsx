@@ -1,14 +1,26 @@
 import { Header } from "@/components"
 import { useEffect, useState } from "react"
+import { pop } from "@/assets"
 
 export default function Todolist(){
 
     const [todo, setodo] = useState([])
+    const popSound = new Audio(pop)
 
     function addTodo(){
-        const newEntry = [...todo,{title:'', done:false}]
-        setodo(newEntry)
-        localStorage.setItem('to-do-list', JSON.stringify(newEntry))
+        const newEntry = [...todo,{title:'', done:0}]
+        const condition = todo.find((obj, index)=>{
+            return ((index===todo.length-1) && obj.title.trim()) && true
+        })
+
+        if(!todo.length || condition){
+            setodo(newEntry)
+            localStorage.setItem('to-do-list', JSON.stringify(newEntry))
+        }else(
+            alert('Walang title habit mo')
+        )
+
+        
         console.log(newEntry)
     }
 
@@ -25,6 +37,14 @@ export default function Todolist(){
         localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
     }
 
+    function check(index){
+        const updatedEntry = todo.map((obj,i)=>{
+            return (index===i && obj.title.trim()) ? {...obj, done:obj.done===0 ? true : !obj.done} : obj
+        })
+        popSound.play()
+        setodo(updatedEntry)
+        localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
+    }
 
 
     useEffect(()=>{
@@ -39,32 +59,44 @@ export default function Todolist(){
         <div className="w-screen h-screen">
             <Header/>
             <div className="flex justify-between w-full h-[80%]">
-                <div id="pending" className=" w-[45%] h-full m-auto bg-[#1211112f] rounded-xl relative" >
+                <div id="pending" className=" w-[45%] h-full m-auto bg-[#1211112f] rounded-xl relative overflow-auto" >
                     <h1 className="text-center text-[2rem]">Pending</h1>
-                    {todo.map((item, index)=>(
-                        <div key={index} className="flex items-center gap-2 p-[1rem] bg-">
-                            <button className={`border-2 overflow-hidden rounded-xl w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}>
-                                <div className={`${item.done ? 'scale-200' : 'scale-0'} transition-all duration-500 rounded-[50%] bg-white w-full h-full `}></div>
-                            </button>
-                            <input className="text-[2rem] outline-0" value={item.title} onChange={(e)=>change(e,index)}></input>
-                        </div>  
-                    ))}
+                    <button className="hover:text-red-900 m-auto" onClick={()=>{localStorage.setItem('to-do-list',JSON.stringify([]));setodo([])}}>Reset</button>
+                    {todo.map((item, index)=>{
+
+                        return !item.done && (
+                            <div key={"pending" + index} className="flex items-center gap-2 p-[1rem] bg-">
+                                <button className={`border-2 overflow-hidden rounded-xl w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}
+                                onClick={()=>check(index)}>
+                                    <div className={`${item.done ? 'scale-200' : 'scale-0'} transition-all duration-500 rounded-[50%] bg-white w-full h-full `}></div>
+                                </button>
+                                <input className="text-[2rem] outline-0" placeholder="Title" value={item.title} onChange={(e)=>change(e,index)}></input>
+                            </div>  
+                        )
+                        
+                    })}
                     
                     <button id="add" className="flex justify-between items-center p-[0.5rem] absolute bottom-1 left-1/2 -translate-x-1/2"
                     onClick={addTodo} >
                         <i className="fa-solid fa-plus hover:rotate-90 transition-transform"></i>
                     </button>
-                    <button className="hover:text-red-900" onClick={()=>localStorage.setItem('to-do-list',JSON.stringify([]))}>Reset</button>
+                    
                 </div>
 
-                <div id="done" className=" w-[45%] h-full m-auto bg-[#1211112f] rounded-xl line-through" >
+                <div id="done" className=" w-[45%] h-full m-auto bg-[#1211112f] rounded-xl overflow-auto" >
                         <h1 className="text-center text-[2rem]">Done</h1>
-                    <div className="flex items-center gap-2 p-[1rem] bg-">
-                        <button className={`border-2 overflow-hidden rounded-xl w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}>
-                            <div className={`transition-all duration-500 rounded-[50%] bg-white w-full h-full scale-200`}></div>
-                        </button>
-                        <span className="text-[2rem]">Habit</span>
-                    </div>  
+                    {todo.map((item, index)=>{
+
+                        return Boolean(item.done) && (
+                            <div key={"done" + index} className="flex items-center gap-2 p-[1rem] bg-">
+                                <button className={`border-2 overflow-hidden rounded-xl w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}
+                                onClick={()=>check(index)}>
+                                    <div className={`transition-all duration-500 rounded-[50%] bg-white w-full h-full scale-200`}></div>
+                                </button>
+                                <span className="text-[2rem] line-through">{item.title}</span>
+                            </div>  
+                    )})}
+                    
                 </div>
 
                 
