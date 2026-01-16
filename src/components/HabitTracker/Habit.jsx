@@ -24,7 +24,7 @@ export default function Habit({index, habit, todate, checkHabit, popSound, setEd
         }, [])
 
     return(
-        <div key={index} className="flex flex-col w-full px-[1rem] py-[0.5rem] bg-[#205295] rounded-xl">
+        <div className="flex flex-col w-full px-[1rem] py-[0.5rem] bg-[#205295] rounded-xl">
                                 
             <div id="habit-header" className="flex justify-between items-center w-full">
                 <span id="habit" className="text-[1.5rem]">{habit.name}</span>
@@ -41,7 +41,7 @@ export default function Habit({index, habit, todate, checkHabit, popSound, setEd
             <div className="flex gap-1 bg-[#1211112f] w-max p-1 rounded-sm">
                 {/* {habit.schedule.length>0 && sched!==habit.schedule[habit.schedule.length-1] ? ', ':''} */}
                 <span>Every </span>
-                {habit.schedule.length!==7 ? days.map((sched)=>(
+                {habit.schedule.length<7 ? days.map((sched)=>(
                     habit.schedule.includes(sched) && (<span>{sched===habit.schedule[habit.schedule.length-1] && 'and ' }{sched}{sched!==habit.schedule[habit.schedule.length-1] ? ', ':''}</span>)
                 )):<span>day</span>}
             </div>
