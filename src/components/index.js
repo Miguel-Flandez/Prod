@@ -4,5 +4,6 @@ import DeleteModal from './Habits/DeleteModal.jsx'
 import HabitTracker from './Habits/HabitTracker.jsx'
 import Habit from './HabitTracker/Habit.jsx'
 import Habitoday from './HabitTracker/Habitoday.jsx'
+import Warning from './Todolist/Warning.jsx'
 
-export {Header, AddHabitModal, DeleteModal, HabitTracker, Habit, Habitoday}
+export {Header, AddHabitModal, DeleteModal, HabitTracker, Habit, Habitoday, Warning}
