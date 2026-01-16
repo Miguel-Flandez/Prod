@@ -1,10 +1,12 @@
-import { Header } from "@/components"
+import { Header, Warning } from "@/components"
 import { useEffect, useState } from "react"
 import { pop } from "@/assets"
 
 export default function Todolist(){
 
     const [todo, setodo] = useState([])
+
+    const [prompt, setPrompt] = useState(false)
     const popSound = new Audio(pop)
 
     function addTodo(){
@@ -17,10 +19,8 @@ export default function Todolist(){
             setodo(newEntry)
             localStorage.setItem('to-do-list', JSON.stringify(newEntry))
         }else(
-            alert('Walang title habit mo')
+            setPrompt(true)
         )
-
-        
         console.log(newEntry)
     }
 
@@ -39,11 +39,17 @@ export default function Todolist(){
 
     function check(index){
         const updatedEntry = todo.map((obj,i)=>{
-            return (index===i && obj.title.trim()) ? {...obj, done:obj.done===0 ? true : !obj.done} : obj
+            return (index===i && obj.title.trim()) ? {...obj, done:!obj.done ? true : !obj.done} : obj
         })
         popSound.play()
-        setodo(updatedEntry)
-        localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
+
+        if(todo[index].title.trim()){
+            setodo(updatedEntry)
+            localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
+        }else{
+            setPrompt(true)
+        }
+        
     }
 
 
@@ -58,6 +64,7 @@ export default function Todolist(){
     return(
         <div className="w-screen h-screen">
             <Header/>
+            <Warning prompt={prompt} setPrompt={setPrompt}/>
             <div className="flex justify-between w-full h-[80%]">
                 <div id="pending" className=" w-[45%] h-full m-auto bg-[#1211112f] rounded-xl relative overflow-auto" >
                     <h1 className="text-center text-[2rem]">Pending</h1>
