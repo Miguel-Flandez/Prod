@@ -3,6 +3,7 @@ import { useMemo } from "react"
 
 export default function Habit({index, habit, todate, checkHabit, popSound, setEditIndex, setShowAddModal, setShowDeleteModal, setDeleteIndex, habits}){
 
+    // days matched with date object indexing
     const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
     const today = new Date().getDay();
 
@@ -66,7 +67,7 @@ export default function Habit({index, habit, todate, checkHabit, popSound, setEd
                     // checkboxes
                     return(
                         <React.Fragment key={id}>
-                            {habit.schedule?.find(n=>n===day) && <button className={` border-2 overflow-hidden rounded-xl w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}
+                            {habit.schedule?.find(n=>n===day) && <button className={` border-2 overflow-hidden rounded-[50%] w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}
                             onClick={()=>{checkHabit(index, date.getDate(), isItDone);popSound.play();console.log(habit.daysCompleted.some(e=>e===date.getDate()))}}>
                                 <div className={`${isItDone && 'scale-200'} transition-all duration-500 rounded-[50%] bg-white w-full h-full scale-0`}></div>
                             </button>}
