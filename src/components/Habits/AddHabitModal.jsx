@@ -11,10 +11,17 @@ export default function AddHabitModal({setShowAddModal, habitHandler, editValues
     // inputs selected days of the week in the selected day array
     function toggleDay(day){
         setSelectedDay(prev=>{
-            if(prev.includes(day)){
-                return prev.filter(e=>e!==day)
-            }
-            return [...prev, day]
+
+            const objSortedDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+
+            const updated = prev.includes(day) ? prev.filter(e=>e!==day) : [...prev, day]
+            
+            return updated.sort((a,b)=>objSortedDays.indexOf(a)-objSortedDays.indexOf(b))
+            
+            // if(prev.includes(day)){
+            //     return prev.filter(e=>e!==day)
+            // }
+            // return [...prev, day]
         })
     }
 
@@ -58,7 +65,7 @@ export default function AddHabitModal({setShowAddModal, habitHandler, editValues
 
     return(
         <div id="modal-container"
-        className="h-screen relative bg-[#144272] flex flex-col items-center py-[5rem] px-[1rem] gap-[2.5vw] rounded-r-4xl w-[30rem] max-md:w-screen max-md:rounded-none">
+        className="h-screen relative bg-[#144272] flex flex-col items-center py-[5rem] px-[1rem] gap-[1.5vw] rounded-r-4xl w-[30rem] max-md:w-screen max-md:rounded-none">
 
             <div id="add-prompt" className="flex items-center justify-between gap-[2vw] w-[90%]">
                 <span className="text-[2.5rem] font-bold whitespace-nowrap">Add a Habit</span>
