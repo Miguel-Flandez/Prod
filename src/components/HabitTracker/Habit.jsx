@@ -42,9 +42,13 @@ export default function Habit({index, habit, todate, checkHabit, popSound, setEd
             <div className="flex gap-1 bg-[#1211112f] w-max p-1 rounded-sm">
                 {/* {habit.schedule.length>0 && sched!==habit.schedule[habit.schedule.length-1] ? ', ':''} */}
                 <span>Every </span>
-                {habit.schedule.length<7 ? days.map((sched)=>(
-                    habit.schedule.includes(sched) && (<span>{sched===habit.schedule[habit.schedule.length-1] && 'and ' }{sched}{sched!==habit.schedule[habit.schedule.length-1] ? ', ':''}</span>)
-                )):<span>day</span>}
+                {/* {habit.schedule.length<7 ? days.map((sched)=>(
+                    habit.schedule.includes(sched) && (<span>{(sched===habit.schedule[habit.schedule.length-1] && habit.schedule.length>0) && 'and ' }{sched}{sched!==habit.schedule[habit.schedule.length-1] ? ', ':''}</span>)
+                )):<span>day</span>} */}
+                {habit.schedule.length<7 ? habit.schedule.map((sched, index)=>(
+                    <span key={'sched'+index}>{(sched===habit.schedule[habit.schedule.length-1]  && habit.schedule.length>1) && 'and '}
+                    {sched}{sched!==habit.schedule[habit.schedule.length-1] && ', '}</span>
+                )):<span>day</span> }
             </div>
                 
             <div id="habit-content" className="flex justify-between">
@@ -67,9 +71,9 @@ export default function Habit({index, habit, todate, checkHabit, popSound, setEd
                     // checkboxes
                     return(
                         <React.Fragment key={id}>
-                            {habit.schedule?.find(n=>n===day) && <button className={` border-2 overflow-hidden rounded-[50%] w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}
-                            onClick={()=>{checkHabit(index, date.getDate(), isItDone);popSound.play();console.log(habit.daysCompleted.some(e=>e===date.getDate()))}}>
-                                <div className={`${isItDone && 'scale-200'} transition-all duration-500 rounded-[50%] bg-white w-full h-full scale-0`}></div>
+                            {habit.schedule?.find(n=>n===day) && <button className={`border-2 group overflow-hidden rounded-[50%] w-[2rem] max-md:w-[1rem] h-[2rem] max-md:h-[1rem]`}
+                            onClick={()=>{checkHabit(index, date.getDate(), isItDone);popSound.play()}}>
+                                <div className={`${isItDone && 'scale-200!'} transition-all duration-500 rounded-[50%] bg-white group-hover:scale-50 w-full h-full scale-0`}></div>
                             </button>}
                             {!habit.schedule?.find(n=>n===day) && <div></div>}
                         </React.Fragment>
