@@ -4,6 +4,9 @@ import { useEffect } from "react"
 export default function Warning({prompt, setPrompt}){
 
     useEffect(()=>{
+
+        if(!prompt) return
+
         const timeout = setTimeout(() => {
             setPrompt(false)
         }, 3000);
