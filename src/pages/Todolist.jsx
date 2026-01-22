@@ -35,6 +35,7 @@ export default function Todolist(){
 
         setodo(updatedEntry)
         localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
+
     }
 
     function check(index){
@@ -58,6 +59,17 @@ export default function Todolist(){
 
         const list = localStorage.getItem('to-do-list')
         list && setodo(JSON.parse(list))
+
+        async function getTodos(){
+            const res = await fetch('http://localhost:3000/todos')
+            const data = await res.json()
+
+            data && setodo(data)
+
+            console.log('api')
+        }
+
+        getTodos()
 
     },[])
 
