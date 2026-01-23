@@ -9,7 +9,7 @@ export default function Todolist(){
     const [prompt, setPrompt] = useState(false)
     const popSound = new Audio(pop)
 
-    function addTodo(){
+    async function addTodo(){
         const newEntry = [...todo,{title:'', done:0}]
         const condition = todo.find((obj, index)=>{
             return ((index===todo.length-1) && obj.title.trim()) && true
@@ -18,6 +18,14 @@ export default function Todolist(){
         if(!todo.length || condition){
             setodo(newEntry)
             localStorage.setItem('to-do-list', JSON.stringify(newEntry))
+
+            await fetch('http://localhost:3000/todos',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({title:'', done:0})
+            })
         }else(
             setPrompt(true)
         )
@@ -57,8 +65,8 @@ export default function Todolist(){
     useEffect(()=>{
         document.body.style.backgroundColor = '#9290C3'
 
-        const list = localStorage.getItem('to-do-list')
-        list && setodo(JSON.parse(list))
+        // const list = localStorage.getItem('to-do-list')
+        // list && setodo(JSON.parse(list))
 
         async function getTodos(){
             const res = await fetch('http://localhost:3000/todos')
@@ -66,7 +74,7 @@ export default function Todolist(){
 
             data && setodo(data)
 
-            console.log('api')
+            console.log(data)
         }
 
         getTodos()
