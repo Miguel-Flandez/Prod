@@ -10,36 +10,46 @@ export default function Todolist(){
     const popSound = new Audio(pop)
 
     async function addTodo(){
-        const newEntry = [...todo,{title:'', done:0}]
+        // const newEntry = [...todo,{title:'', done:0}]
         const condition = todo.find((obj, index)=>{
-            return ((index===todo.length-1) && obj.title.trim()) && true
+            return Boolean((index===todo.length-1) && obj.title.trim())
         })
 
         if(!todo.length || condition){
-            setodo(newEntry)
-            localStorage.setItem('to-do-list', JSON.stringify(newEntry))
-
-            await fetch('http://localhost:3000/todos',{
+            const res = await fetch('http://localhost:3000/todos',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
                 body:JSON.stringify({title:'', done:0})
             })
+
+            const data = await res.json()
+
+            setodo(prev=>[...prev,data])
+            localStorage.setItem('to-do-list', JSON.stringify([...todo,data]))
+
+
         }else(
             setPrompt(true)
         )
-        console.log(newEntry)
     }
 
-    function change(event, index){
-        const updatedEntry = todo.map((obj,i)=>{
-            console.log(event.target.value, index, i)
-               return index===i ? {...obj, title:event.target.value} : obj
+    async function change(event, id){
+        const updatedEntry = todo.map((obj)=>{
+                console.log(event.target.value, id)
+               return id===obj.id ? {...obj, title:event.target.value} : obj
             })
 
-            console.log(updatedEntry)
+        console.log(updatedEntry)
 
+        fetch('http://localhost:3000/todos',{
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({title:event.target.value, id:id})
+        })
 
         setodo(updatedEntry)
         localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
@@ -100,7 +110,7 @@ export default function Todolist(){
                                     onClick={()=>check(index)}>
                                         <div className={`${item.done ? 'scale-200' : 'scale-0'} group-hover:scale-50 transition-all duration-500 rounded-[50%] bg-white w-full h-full `}></div>
                                     </button>
-                                    <input className="text-[2rem] outline-0 max-md:text-[1rem]" placeholder="Title" value={item.title} onChange={(e)=>change(e,index)}></input>
+                                    <input className="text-[2rem] outline-0 max-md:text-[1rem]" placeholder="Title" value={item.title} onChange={(e)=>change(e,item.id)}></input>
                                 </div>  
                             )
                             
