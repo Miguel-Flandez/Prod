@@ -56,13 +56,21 @@ export default function Todolist(){
 
     }
 
-    function check(index){
-        const updatedEntry = todo.map((obj,i)=>{
-            return (index===i && obj.title.trim()) ? {...obj, done:!obj.done ? true : !obj.done} : obj
+    async function check(id, index){
+        const updatedEntry = todo.map((obj)=>{
+            return (id===obj.id && obj.title.trim()) ? {...obj, done:!obj.done ? true : !obj.done} : obj
         })
         popSound.play()
 
         if(todo[index].title.trim()){
+            fetch('http://localhost:3000/todos',{
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({done:'negate', id:id})
+        })
+            fetch()
             setodo(updatedEntry)
             localStorage.setItem('to-do-list', JSON.stringify(updatedEntry))
         }else{
@@ -107,7 +115,7 @@ export default function Todolist(){
                         {todo.map((item, index)=>(
                                 <div key={"pending" + index} className={`${item.done && 'translate-x-full opacity-0 absolute'} flex items-center gap-2 p-[1rem] transition-all z-0`}>
                                     <button className={`border-2 overflow-hidden rounded-[50%] min-w-[2rem] max-md:min-w-[1rem] h-[2rem] max-md:h-[1rem] group`}
-                                    onClick={()=>check(index)}>
+                                    onClick={()=>check(item.id, index)}>
                                         <div className={`${item.done ? 'scale-200' : 'scale-0'} group-hover:scale-50 transition-all duration-500 rounded-[50%] bg-white w-full h-full `}></div>
                                     </button>
                                     <input className="text-[2rem] outline-0 max-md:text-[1rem]" placeholder="Title" value={item.title} onChange={(e)=>change(e,item.id)}></input>
@@ -130,7 +138,7 @@ export default function Todolist(){
                     {todo.map((item, index)=>(
                             <div key={"done" + index} className={`${!item.done && 'translate-x-full opacity-0 absolute'} flex items-center gap-2 p-[1rem] transition-all z-0`}>
                                 <button className={`border-2 overflow-hidden rounded-[50%] min-w-[2rem] max-md:min-w-[1rem] h-[2rem] max-md:h-[1rem]`}
-                                onClick={()=>check(index)}>
+                                onClick={()=>check(item.id, index)}>
                                     <div className={`transition-all duration-500 rounded-[50%] bg-white w-full h-full scale-200`}></div>
                                 </button>
                                 <span className="text-[2rem] line-through max-md:text-[1rem]">{item.title}</span>
